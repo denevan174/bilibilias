@@ -85,7 +85,7 @@ internal fun Project.configureKotlinMultiplatformAndroid(kotlinMultiplatformExte
     }
 }
 
-private fun Project.iosFrameworkBaseName(): String = path
+private fun Project.iosFrameworkBaseName(): String = "AS" + path
     .removePrefix(":")
     .split(":")
     .joinToString(separator = "") { segment ->

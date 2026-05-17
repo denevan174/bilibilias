@@ -13,6 +13,7 @@ import com.imcys.bilibilias.network.model.QRCodePollInfo
 import com.imcys.bilibilias.network.service.BILIBILITVAPIService
 import com.imcys.bilibilias.network.service.BILIBILIWebAPIService
 import com.imcys.bilibilias.network.utils.WebiTokenUtils
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import kotlinx.coroutines.flow.map
 
 class QRCodeLoginRepository(
@@ -21,6 +22,7 @@ class QRCodeLoginRepository(
     private val biliUsersDao: BILIUsersDao,
     private val biliUserCookiesDao: BILIUserCookiesDao
 ) {
+    @NativeCoroutines
     suspend fun getLoginQRCodeInfo(loginPlatform: LoginPlatform): FlowNetWorkResult<QRCodeInfo> {
         return when (loginPlatform) {
             LoginPlatform.WEB -> webApiService.qrcodeGenerate()
@@ -41,6 +43,7 @@ class QRCodeLoginRepository(
     /**
      * 获取扫码状态
      */
+    @NativeCoroutines
     suspend fun getQRScanState(
         loginPlatform: LoginPlatform,
         qrcodeKey: String

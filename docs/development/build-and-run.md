@@ -103,10 +103,10 @@ ABI：
 ./gradlew :app:compileAlphaDebugKotlin
 ```
 
-构建 `core` 下 iOS 可导入 `XCFramework` 并汇总到统一目录：
+构建 iOS 可导入 `XCFramework`：
 
 ```bash
-./gradlew collectCoreIosArtifacts
+./gradlew assembleSharedIosArtifacts
 ```
 
 详细说明见 [iOS 导入产物](./ios-artifacts.md)。

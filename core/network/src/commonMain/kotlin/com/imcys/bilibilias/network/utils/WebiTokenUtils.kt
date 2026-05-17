@@ -70,10 +70,18 @@ object WebiTokenUtils {
      * 更新Webi的Key
      */
     suspend fun BILIBILIWebAPIService.updateWebiKey() {
+        println("ASShared[WebiTokenUtils] updateWebiKey() start")
         runCatching {
             getWebIInfoNoCheckLogin()
         }.onSuccess {
-            it.data?.wbiImg?.let { wbiImg -> setKey(wbiImg) }
+            println("ASShared[WebiTokenUtils] updateWebiKey() response code=${it.code}, message=${it.message}")
+            it.data?.wbiImg?.let { wbiImg ->
+                setKey(wbiImg)
+                println("ASShared[WebiTokenUtils] key updated, isNull=${key == null}")
+            } ?: println("ASShared[WebiTokenUtils] wbiImg is null")
+        }.onFailure { throwable ->
+            println("ASShared[WebiTokenUtils] updateWebiKey() failed: ${throwable::class.simpleName}: ${throwable.message}")
+            throwable.printStackTrace()
         }
     }
 

@@ -7,7 +7,7 @@ plugins {
 }
 
 kotlin {
-    val iosXcframework = XCFramework("CoreDatastoreProto")
+    val iosXcframework = XCFramework("ASCoreDatastoreProto")
 
     jvm {
         compilerOptions {
@@ -15,13 +15,13 @@ kotlin {
         }
     }
     iosArm64 {
-        binaries.framework("CoreDatastoreProto") {
+        binaries.framework("ASCoreDatastoreProto") {
             isStatic = true
             iosXcframework.add(this)
         }
     }
     iosSimulatorArm64 {
-        binaries.framework("CoreDatastoreProto") {
+        binaries.framework("ASCoreDatastoreProto") {
             isStatic = true
             iosXcframework.add(this)
         }

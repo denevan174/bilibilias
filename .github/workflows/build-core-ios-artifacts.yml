@@ -1,4 +1,4 @@
-name: Build Core iOS Artifacts
+name: Build Shared iOS Artifacts
 
 on:
   workflow_dispatch:
@@ -55,12 +55,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Collect Core iOS Artifacts
-        run: ./gradlew collectCoreIosArtifacts --stacktrace --info
+      - name: Build Shared iOS Artifacts
+        run: ./gradlew assembleSharedIosArtifacts --stacktrace --info
 
-      - name: Upload Core iOS Artifacts
+      - name: Upload Shared iOS Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: core-ios-artifacts
-          path: core/build/ios-artifacts
+          name: shared-ios-artifacts
+          path: shared/build/XCFrameworks/release/ASShared.xcframework
           if-no-files-found: error

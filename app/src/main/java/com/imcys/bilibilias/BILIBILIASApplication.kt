@@ -9,15 +9,12 @@ import com.imcys.bilibilias.common.data.CommonBuildConfig
 import com.imcys.bilibilias.common.memory.FairMemoryReceiver
 import com.imcys.bilibilias.common.shizuku.ShizukuStateManager
 import com.imcys.bilibilias.common.utils.baiduAnalyticsSafe
+import com.imcys.bilibilias.data.di.sharedKoinModules
 import com.imcys.bilibilias.data.repository.AppSettingsRepository
 import com.imcys.bilibilias.datastore.*
-import com.imcys.bilibilias.data.di.repositoryModule
-import com.imcys.bilibilias.database.di.databaseModule
-import com.imcys.bilibilias.datastore.di.dataStoreModule
-import com.imcys.bilibilias.di.appModule
+import com.imcys.bilibilias.di.androidPlatformKoinModules
 import com.imcys.bilibilias.download.FfmpegRuntimeConfig
 import com.imcys.bilibilias.download.NewDownloadManager
-import com.imcys.bilibilias.network.di.netWorkModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -53,13 +50,7 @@ class BILIBILIASApplication : Application(), AppFunctionConfiguration.Provider {
                 androidLogger()
             }
             androidContext(this@BILIBILIASApplication)
-            modules(
-                dataStoreModule,
-                netWorkModule,
-                repositoryModule,
-                databaseModule,
-                appModule,
-            )
+            modules(sharedKoinModules() + androidPlatformKoinModules())
         }
         // 监听公平运行内存调度
         bindFairMemoryReceiver()

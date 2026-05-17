@@ -4,13 +4,12 @@ import com.imcys.bilibilias.database.BILIBILIASDatabase
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-fun createDatabaseModule(
-    databaseProvider: () -> BILIBILIASDatabase,
-): Module = module {
-    single<BILIBILIASDatabase> {
-        databaseProvider()
-    }
+expect fun provideDatabase(): BILIBILIASDatabase
 
+val databaseModule: Module = module {
+    single<BILIBILIASDatabase> {
+        provideDatabase()
+    }
     factory {
         get<BILIBILIASDatabase>().biliUsersDao()
     }

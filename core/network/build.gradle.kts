@@ -18,12 +18,19 @@ kotlin {
             implementation(project(":core:datastore"))
             implementation(libs.okio)
             api(libs.ktor.client.core)
-            api(libs.ktor.client.cio)
             api(libs.ktor.client.content.negotiation)
             api(libs.ktor.serialization.kotlinx.json)
             api(libs.ktor.serialization.kotlinx.protobuf)
             api(libs.ksoup.network)
             api(libs.ktor.client.logging)
+        }
+
+        androidMain.dependencies {
+            api(libs.ktor.client.cio)
+        }
+
+        iosMain.dependencies {
+            api(libs.ktor.client.darwin)
         }
     }
 }

@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import com.imcys.bilibilias.database.entity.LoginPlatform
 import com.imcys.bilibilias.database.entity.download.MediaContainer
 import com.imcys.bilibilias.datastore.*
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
@@ -12,9 +13,11 @@ class AppSettingsRepository(
 ) {
     private val TAG: String = "AppSettingsRepository"
 
+    @NativeCoroutines
     val appSettingsFlow: Flow<AppSettings> = dataStore.data
 
     // 获取当前平台类型
+    @NativeCoroutines
     suspend fun getVideoParsePlatform(): AppSettings.VideoParsePlatform =
         appSettingsFlow.first().videoParsePlatform
 

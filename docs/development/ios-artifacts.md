@@ -1,45 +1,32 @@
 # iOS 导入产物
 
-当前仓库为 `core` 下可复用的 Kotlin Multiplatform 模块提供 iOS 导入产物流水线，目标是产出可直接被 Xcode 导入的 `XCFramework`。
+当前仓库通过聚合模块 `:shared` 提供 iOS 导入产物流水线，目标是产出一个可直接被 Xcode 导入的 `XCFramework` 单入口产物。
 
 ## 覆盖模块
 
-当前会产出以下模块的 iOS 导入产物：
+当前默认产出以下模块的 iOS 导入产物：
 
-- `core:common`
-- `core:data`
-- `core:database`
-- `core:datastore`
-- `core:datastore-proto`
-- `core:network`
+- `shared`
 
-以下模块不参与该流水线：
-
-- `core:ui`
-- `core:ffmpeg`
+`shared` 内部聚合 `core:data`，并通过 `core:data` 的公开依赖向上暴露 `core:database`、`core:datastore`、`core:network` 等能力。iOS 工程应优先只导入这一份产物，而不是分别拖入多个 `core:*` 框架。
 
 ## 本地构建
 
-构建并汇总产物：
+构建产物：
 
 ```bash
-./gradlew collectCoreIosArtifacts
+./gradlew assembleSharedIosArtifacts
 ```
 
-汇总目录：
+产物目录：
 
 ```text
-core/build/ios-artifacts/
+shared/build/XCFrameworks/release/
 ```
 
-每个模块会生成一个独立的 `XCFramework` 目录：
+当前默认会生成一个聚合 `XCFramework` 目录：
 
-- `CoreCommon.xcframework`
-- `CoreData.xcframework`
-- `CoreDatabase.xcframework`
-- `CoreDatastore.xcframework`
-- `CoreDatastoreProto.xcframework`
-- `CoreNetwork.xcframework`
+- `ASShared.xcframework`
 
 ## CI 流水线
 
@@ -52,13 +39,15 @@ GitHub Actions 工作流文件：
 流水线运行在 `macos-latest`，执行：
 
 ```bash
-./gradlew collectCoreIosArtifacts --stacktrace --info
+./gradlew assembleSharedIosArtifacts --stacktrace --info
 ```
 
-随后上传目录 `core/build/ios-artifacts` 作为构建产物。
+随后直接上传 `shared/build/XCFrameworks/release/ASShared.xcframework` 作为构建产物。
 
 ## 说明
 
-- 当前流水线面向模块级导入产物，不会额外合并为单一总框架。
-- `data`、`network`、`database` 等模块之间仍保持当前工程依赖关系；iOS 侧接入时应按需要导入对应模块。
-- 若后续新增新的 KMP `core` 模块，需要同步更新根项目的 `assembleCoreIosArtifacts` / `collectCoreIosArtifacts` 任务和该文档。
+- 当前流水线默认面向 iOS 单入口产物，优先通过 `ASShared.xcframework` 交付。
+- Kotlin 工程内部仍保持 `core:*` 多模块结构；`shared` 只负责对 iOS 聚合导出。
+- 不再额外把产物复制到 `core/build/ios-artifacts`；默认直接使用 `shared` 模块原生输出目录。
+- iOS 侧初始化和 bridge 入口也应优先从 `shared` 暴露；若直接通过 repository/bridge 访问，当前实现也会自动完成 Koin 懒启动。
+- 若后续新增需要暴露给 iOS 的 KMP 模块，优先评估是否应作为 `shared` 的依赖导出，并同步更新根项目任务和该文档。

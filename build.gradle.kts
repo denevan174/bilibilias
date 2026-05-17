@@ -14,39 +14,21 @@ plugins {
     alias(libs.plugins.android.multiplatform.library) apply false
     alias(libs.plugins.androidx.room3) apply false
     alias(libs.plugins.wire) apply false
+    alias(libs.plugins.kmp.nativecoroutines) apply false
 
 }
 
 val iosArtifactModules = listOf(
-    ":core:common" to "CoreCommon",
-    ":core:data" to "CoreData",
-    ":core:database" to "CoreDatabase",
-    ":core:datastore" to "CoreDatastore",
-    ":core:datastore-proto" to "CoreDatastoreProto",
-    ":core:network" to "CoreNetwork",
+    ":shared" to "ASShared",
 )
 
-tasks.register("assembleCoreIosArtifacts") {
+tasks.register("assembleSharedIosArtifacts") {
     group = "build"
-    description = "Builds iOS XCFramework artifacts for core modules except ui and ffmpeg."
+    description = "Builds the aggregated iOS XCFramework artifacts in each source module's build directory."
 
     dependsOn(
         iosArtifactModules.map { (path, frameworkName) ->
             "$path:assemble${frameworkName}ReleaseXCFramework"
         }
     )
-}
-
-tasks.register<Sync>("collectCoreIosArtifacts") {
-    group = "build"
-    description = "Collects iOS XCFramework artifacts for core modules into a single directory."
-
-    dependsOn("assembleCoreIosArtifacts")
-    into(layout.projectDirectory.dir("core/build/ios-artifacts"))
-
-    iosArtifactModules.forEach { (path, frameworkName) ->
-        from(project(path).layout.buildDirectory.dir("XCFrameworks/release/$frameworkName.xcframework")) {
-            into("$frameworkName.xcframework")
-        }
-    }
 }

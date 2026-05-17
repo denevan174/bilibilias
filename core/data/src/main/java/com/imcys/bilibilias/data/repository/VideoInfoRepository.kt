@@ -14,9 +14,11 @@ import com.imcys.bilibilias.network.model.video.BILIDonghuaOgvPlayerInfo
 import com.imcys.bilibilias.network.model.video.BILIDonghuaPlayerInfo
 import com.imcys.bilibilias.network.model.video.BILIDonghuaPlayerSynthesize
 import com.imcys.bilibilias.network.model.video.BILIDonghuaSeasonInfo
+import com.imcys.bilibilias.network.model.video.BILIVideoViewInfo
 import com.imcys.bilibilias.network.model.video.BILIVideoPlayerInfo
 import com.imcys.bilibilias.network.service.BILIBILITVAPIService
 import com.imcys.bilibilias.network.service.BILIBILIWebAPIService
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
@@ -33,10 +35,12 @@ class VideoInfoRepository(
     private val appSettingsRepository: AppSettingsRepository,
 ) {
 
+    @NativeCoroutines
     suspend fun getVideoView(
         bvId: String? = null,
         aid: String? = null,
-    ) = webApiService.getVideoView(bvId, aid)
+    ): FlowNetWorkResult<BILIVideoViewInfo> =
+        webApiService.getVideoView(bvId, aid)
 
     suspend fun shortLink(
         url: String

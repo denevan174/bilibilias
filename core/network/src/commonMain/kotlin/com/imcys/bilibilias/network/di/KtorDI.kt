@@ -15,8 +15,6 @@ import com.imcys.bilibilias.network.service.BILIBILITVAPIService
 import com.imcys.bilibilias.network.service.BILIBILIWebAPIService
 import com.imcys.bilibilias.network.service.BgmAPIService
 import com.imcys.bilibilias.network.service.GithubAPIService
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.BrowserUserAgent
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
@@ -54,7 +52,7 @@ val netWorkModule = module {
     }
 
     single {
-        HttpClient(CIO) {
+        platformHttpClient {
             BrowserUserAgent()
             install(HttpTimeout) {
                 requestTimeoutMillis = 10000
@@ -105,7 +103,7 @@ val netWorkModule = module {
 
     // 专用于下载的纯净HttpClient，不装任何业务插件
     single(qualifier = named("DownloadHttpClient")) {
-        HttpClient(CIO) {
+        platformHttpClient {
             BrowserUserAgent()
             install(HttpTimeout) {
                 requestTimeoutMillis = 60000 // 下载可适当延长
@@ -137,7 +135,7 @@ val netWorkModule = module {
 
     //统用的网络请求不装任何业务插件
     single(qualifier = named("CommonApiHttpClient")) {
-        HttpClient(CIO) {
+        platformHttpClient {
             BrowserUserAgent()
             install(HttpTimeout) {
                 requestTimeoutMillis = 120_000
