@@ -41,9 +41,13 @@ import com.imcys.bilibilias.shared.platform.permission.hasStoragePermission
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -92,11 +96,8 @@ class AnalysisViewModel(
 
 
     private val debounceTime = 1000L // 防抖时间
-    private val debounceJob: MutableStateFlow<String?> = MutableStateFlow(null)
-
-
+    private var debounceJob: Job? = null
     init {
-
         viewModelScope.launch(Dispatchers.IO) {
             usersDataSource.users.collect {
                 val oldLoginState = _uiState.value.isBILILogin
@@ -112,16 +113,6 @@ class AnalysisViewModel(
                     }
                 }
             }
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            debounceJob
-                .debounce(debounceTime) // 设置防抖时间
-                .distinctUntilChanged() // 避免重复处理相同的输入
-                .collect { inputAsText ->
-                    if (inputAsText.isNullOrEmpty()) return@collect
-                    analysisInputText(inputAsText)
-                }
         }
 
         viewModelScope.launch {
@@ -224,7 +215,14 @@ class AnalysisViewModel(
             analysisBaseInfo = AnalysisBaseInfo(),
         )
         if (inputAsText.isEmpty()) return
-        debounceJob.value = inputAsText
+
+        debounceJob?.cancel()
+        debounceJob = viewModelScope.launch(Dispatchers.IO) {
+            delay(debounceTime)
+            if (inputAsText == _uiState.value.inputAsText) {  // 确保值没变
+                analysisInputText(inputAsText)
+            }
+        }
     }
 
 

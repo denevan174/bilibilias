@@ -30,18 +30,18 @@ playAppReview = "2.0.2"
 deviceCompat = "2.0"
 shizuku = "13.1.5"
 xposed = "82"
-composeMultiplatformAdaptive = "1.3.0-alpha07"
-multiplatformNav3Ui = "1.0.0-alpha05"
+composeMultiplatformAdaptive = "1.3.0-beta01"
+multiplatformNav3Ui = "1.1.1"
 documentfile = "1.1.0"
 ffmpegKitX6kb = "6.1.1"
 appfunctions = "1.0.0-alpha07"
-room3 = "3.0.0-alpha04"
-sqlite = "2.6.1"
+room3 = "3.0.0-alpha05"
+sqlite = "2.6.2"
 ksoup = "0.2.6"
-serializationJson = "1.9.0"
-kotlinxDatetime = "0.7.1"
-kotlinxIo = "0.8.2"
-wire = "5.4.0"
+serializationJson = "1.11.0"
+kotlinxDatetime = "0.8.0"
+kotlinxIo = "0.9.0"
+wire = "6.4.0"
 # Testing
 junit4 = "4.13.2"
 androidxTest = "1.7.0"
@@ -90,8 +90,8 @@ firebase-crashlytics-ndk = { group = "com.google.firebase", name = "firebase-cra
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf" }
 confettikit = { module = "io.github.vinceglb:confettikit", version.ref = "confettikit" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
-ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }

@@ -2,8 +2,8 @@ package com.imcys.bilibilias.network.di
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
-import io.ktor.client.engine.cio.CIO
+import io.ktor.client.engine.okhttp.OkHttp
 
 actual fun platformHttpClient(
     block: HttpClientConfig<*>.() -> Unit
-): HttpClient = HttpClient(CIO, block)
+): HttpClient = HttpClient(OkHttp, block)

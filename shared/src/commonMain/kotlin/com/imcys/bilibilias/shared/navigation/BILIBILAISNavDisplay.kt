@@ -27,6 +27,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -49,8 +50,6 @@ import com.imcys.bilibilias.datastore.AppSettingsSerializer
 import com.imcys.bilibilias.datastore.enabledNavAnimation
 import com.imcys.bilibilias.datastore.enabledNavOnBackInvokedCallback
 import com.imcys.bilibilias.datastore.navBackStack
-import com.imcys.bilibilias.shared.platform.firebase.FirebaseExt
-import com.imcys.bilibilias.shared.platform.firebase.FirebaseExt.logOpenAppPage
 import com.imcys.bilibilias.shared.feature.analysis.AnalysisScreen
 import com.imcys.bilibilias.shared.feature.analysis.navigation.AnalysisRoute
 import com.imcys.bilibilias.shared.feature.analysis.videocodeing.VideoCodingInfoRoute
@@ -114,6 +113,8 @@ import com.imcys.bilibilias.shared.feature.user.like.LikeVideoScreen
 import com.imcys.bilibilias.shared.feature.user.navigation.UserRoute
 import com.imcys.bilibilias.shared.feature.user.work.WorkListRoute
 import com.imcys.bilibilias.shared.feature.user.work.WorkListScreen
+import com.imcys.bilibilias.shared.platform.firebase.FirebaseExt
+import com.imcys.bilibilias.shared.platform.firebase.FirebaseExt.logOpenAppPage
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
@@ -125,6 +126,7 @@ import org.koin.compose.koinInject
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun BILIBILAISNavDisplay() {
+    val rootViewModelStoreOwner = LocalViewModelStoreOwner.current ?: error("No ViewModelStoreOwner")
 
     val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
     val navBackStackSerializer =
@@ -340,6 +342,7 @@ fun BILIBILAISNavDisplay() {
                 entry<UserRoute> {
                     UserScreen(
                         userRoute = it,
+                        viewModelStoreOwner = rootViewModelStoreOwner,
                         onToBack = onBack,
                         onToSettings = {
                             backStack.addWithReuse(SettingRoute)

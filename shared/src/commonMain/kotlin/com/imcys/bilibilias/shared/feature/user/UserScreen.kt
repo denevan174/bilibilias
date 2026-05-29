@@ -60,7 +60,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.ViewModelStoreOwner
 import bilibilias.shared.generated.resources.Res
 import bilibilias.shared.generated.resources.ic_mini_bili_logo_24px
 import bilibilias.shared.generated.resources.user_bangumi
@@ -116,6 +116,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 internal fun UserScreen(
     userRoute: UserRoute,
+    viewModelStoreOwner: ViewModelStoreOwner,
     onToBack: () -> Unit,
     onToSettings: () -> Unit,
     onToWorkList: (mid: Long) -> Unit,
@@ -125,8 +126,7 @@ internal fun UserScreen(
     onToCoinVide: (mid: Long) -> Unit,
     onToPlayHistory: () -> Unit,
 ) {
-    val owner = LocalViewModelStoreOwner.current ?: error("No ViewModelStoreOwner")
-    val vm = koinViewModel<UserViewModel>(viewModelStoreOwner = owner)
+    val vm = koinViewModel<UserViewModel>(viewModelStoreOwner = viewModelStoreOwner)
     val pageInfoState by vm.userPageInfoState.collectAsStateWithLifecycle()
     val userStatInfoState by vm.userStatInfoState.collectAsStateWithLifecycle()
     val spaceArchiveInfoState by vm.spaceArchiveInfoState.collectAsStateWithLifecycle()
